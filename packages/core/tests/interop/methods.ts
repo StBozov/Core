@@ -188,7 +188,7 @@ describe("methods", () => {
         return Promise.resolve();
     });
 
-    it("methods filter check", async () => {
+    it ("methods filter check", async () => {
         const glue2 = await createGlue();
         const name = getMethodName();
         const objectTypes = ["1", "2"];

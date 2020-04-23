@@ -59,7 +59,9 @@ describe("typings - checks that d.ts works as expected, not real tests", () => {
 
     it("method.getServers should not be optional method", () => {
         const m = glue.interop.methods("a")[0];
-        const servers = m.getServers();
+        if (m) {
+            const servers = m.getServers();
+        }
     });
 
 });
