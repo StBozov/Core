@@ -325,7 +325,7 @@ export default class Client {
                     const errorObj: InvocationResult = {
                         method,
                         called_with: argumentObj,
-                        message: "Can not find a method matching " + JSON.stringify(methodFilter) + " with server filter " + JSON.stringify(target) + ". Is the object a valid instance ?",
+                        message: `Can not find a method matching ${JSON.stringify(methodFilter)} with server filter ${JSON.stringify(target)}`,
                         executed_by: undefined,
                         returned: undefined,
                         status: undefined,
