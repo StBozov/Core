@@ -1,8 +1,6 @@
-## Overview
+## Guide
 
-This Quick Guide will show you how to easily create, setup and run a simple **Glue42 Core** project.
-
-## Quick Guide
+This guide will show you how to easily create, setup and run a simple **Glue42 Core** project.
 
 1. Install the [**Glue42 Core CLI**](../../what-is-glue42-core/core-concepts/cli/index.html) globally with `npm`:
 
