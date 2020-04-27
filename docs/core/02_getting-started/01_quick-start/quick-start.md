@@ -2,7 +2,7 @@
 
 This guide will show you how to easily create, setup and run a simple **Glue42 Core** project.
 
-1. Install the [**Glue42 Core CLI**](../../what-is-glue42-core/core-concepts/cli/index.html) globally with `npm`:
+1. Install the [**Glue42 CLI**](../../core-concepts/cli/index.html) globally with `npm`:
 
 ```javascript
 npm install --global @glue42/cli-core
@@ -84,11 +84,11 @@ Now your app will be served at `http://localhost:4242` and if you open its conso
 
 Congratulations, you now have your very first **Glue42 Core** app! 
 
-For more information on setting up the [**Glue42 Environment**](../../what-is-glue42-core/core-concepts/environment/index.html), see:
-- [**Single Application**](../setting-environment/single-application/index.html) setup section. 
-- [**Multiple Application**](../setting-environment/multiple-applications/index.html) setup section.
-- [**Manual**](setting-environment/manual/index.html) setup section.
+For more information on setting up the [**Glue42 Environment**](../../core-concepts/environment/overview/index.html), see:
+- [**Single Application**](../../core-concepts/environment/setup/index.html#single_application) setup section. 
+- [**Multiple Application**](../../core-concepts/environment/setup/index.html#multiple_application) setup section.
+- [**Manual**](../../core-concepts/environment/setup/index.html#manual) setup section.
 
-If you wish to launch a React app, you can check out the [**React**](../setting-application/react/index.html) guide for setting up your application.
+For a more detailed instructions on how to set up your app, see the [JavaScript](../../core-concepts/glue42-client/javascript/index.html) and [**React**](../../core-concepts/glue42-client/react/index.html) guides.
 
 For more information on the **Glue42 Web** library, see the [**Reference**](../../../reference/core/latest/glue42%20web/index.html) section.

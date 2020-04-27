@@ -1,6 +1,6 @@
 ## Overview
 
-A **Glue42 Client** is every application which initializes the [**Glue42 Web**](../../../../reference/core/latest/glue42%20web/index.html) library and connects to the [**Glue42 Environment**](../environment/index.html). There could be one or more Glue42 Clients connected to the same Glue42 Core Environment on a single domain, which gives them full access to the [Interop](../../../../reference/core/latest/interop/index.html), [Window Management](../../../../reference/core/latest/windows/index.html) and [Shared Contexts](../../../../reference/core/latest/shared%20contexts/index.html) functionalities offered by the **Glue42 Core** platform.
+A **Glue42 Client** is every application which initializes the [**Glue42 Web**](../../../../reference/core/latest/glue42%20web/index.html) library and connects to the [**Glue42 Environment**](../../environment/overview/index.html). There could be one or more Glue42 Clients connected to the same Glue42 Core Environment on a single domain, which gives them full access to the [Interop](../../../../reference/core/latest/interop/index.html), [Window Management](../../../../reference/core/latest/windows/index.html) and [Shared Contexts](../../../../reference/core/latest/shared%20contexts/index.html) functionalities offered by the **Glue42 Core** platform.
 
 A Glue42 Client can be any web application using JavaScript, React, Angular or any other web framework.
 

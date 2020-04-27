@@ -6,15 +6,15 @@ In industries and businesses that depend on tens (even hundreds) of different ap
 
 ## High Level Structure
 
-A **Glue42 Core** project consists of a [**Glue42 Environment**](../core-concepts/environment/index.html) and one or more [**Glue42 Clients**](../core-concepts/glue42-client/index.html), all of which share the same origin - protocol, host and port. The client applications connect to the environment through the [**Glue42 Web**](../../../reference/core/latest/glue42%20web/index.html) library.
+A **Glue42 Core** project consists of a [**Glue42 Environment**](../core-concepts/environment/overview/index.html) and one or more [**Glue42 Clients**](../core-concepts/glue42-client/overview/index.html), all of which share the same origin - protocol, host and port. The client applications connect to the environment through the [**Glue42 Web**](../../reference/core/latest/glue42%20web/index.html) library.
 
 ### Environment
 
-The **Glue42 Core** [Environment](../core-concepts/environment/index.html) is a collection of resources which, once hosted, the browser will execute on a separate thread.  The resources are accessible to all applications on the same host and port even if the applications run in different windows. The communication between the applications is handled by the environment. To achieve that, **Glue42 Core** uses the [**Shared Web Worker**](https://developer.mozilla.org/en-US/docs/Web/API/SharedWorker) interface which is widely adopted by all major browsers. This means that you do not need any additional software to run your **Glue42 Core** project.
+The **Glue42 Core** [Environment](../core-concepts/environment/overview/index.html) is a collection of resources which, once hosted, the browser will execute on a separate thread.  The resources are accessible to all applications on the same host and port even if the applications run in different windows. The communication between the applications is handled by the environment. To achieve that, **Glue42 Core** uses the [**Shared Web Worker**](https://developer.mozilla.org/en-US/docs/Web/API/SharedWorker) interface which is widely adopted by all major browsers. This means that you do not need any additional software to run your **Glue42 Core** project.
 
 ### Glue42 Client
 
-A [**Glue42 Client**](../core-concepts/glue42-client/index.html) is any application that connects to the [**Environment**](../core-concepts/environment/index.html). The clients are also called **Glue42 enabled apps**. The connection to the environment is handles by the [`@glue42/web`](https://www.npmjs.com/package/@glue42/web) JavaScript library. The Glue42 Web library also exposes an [API](../../../reference/core/latest/glue42%20web/index.html) for utilizing the **Glue42 Core** functionalities.
+A [**Glue42 Client**](../core-concepts/glue42-client/overview/index.html) is any application that connects to the [**Glue42 Environment**](../core-concepts/environment/overview/index.html). The clients are also called **Glue42 enabled apps**. The connection to the environment is handled by the [`@glue42/web`](https://www.npmjs.com/package/@glue42/web) JavaScript library. The [Glue42 Web](../../reference/core/latest/glue42%20web/index.html) library also exposes an API for utilizing the **Glue42 Core** functionalities.
 
 ### Glue42 Core CLI
 
@@ -25,7 +25,7 @@ The [**Glue42 Core CLI**](../core-concepts/cli/index.html) is a development tool
 
 ### Glue42 Web Library
 
-The [**Glue42 Web**](../../../reference/core/latest/glue42%20web/index.html) library connects the client applications to the environment. It offer sets of APIs through which the connected applications can share data and control window behavior. For more information, see the [**Capabilities**](../capabilities/index.html) section.
+The [**Glue42 Web**](../../reference/core/latest/glue42%20web/index.html) library connects the client applications to the environment. It offer sets of APIs through which the connected applications can share data and control window behavior. For more information, see the [**Capabilities**](../capabilities/overview/index.html) section.
 
 ## Requirements
 
@@ -36,4 +36,4 @@ Developing a **Glue42 Core** project requires:
 - general JavaScript knowledge;
 - general web development knowledge;
 
-If all this intrigues you, see the [**Quick Start**](../../getting-started/quick-start/index.html) and the [**Capabilities**](../capabilities/index.html) sections for more information on **Glue42 Core**.
+If all this intrigues you, see the [**Quick Start**](../getting-started/quick-start/index.html) and the [**Capabilities**](../capabilities/overview/index.html) sections for more information on **Glue42 Core**.

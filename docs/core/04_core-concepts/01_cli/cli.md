@@ -29,7 +29,7 @@ gluec init
 
 The `init` command will set up **Glue42 Core** for the current directory. This means that the CLI will:
 
-- install with `npm` (and perform `npm init --yes` beforehand if no `package.json` file is found) all necessary dependencies that provide the [**Glue42 Environment**](../environment/index.html) files;
+- install with `npm` (and perform `npm init --yes` beforehand if no `package.json` file is found) all necessary dependencies that provide the [**Glue42 Environment**](../environment/overview/index.html) files;
 - create a `glue.config.dev.json` file with default settings and correct paths for all **Glue42 Core** assets;
 - create a `glue.config.json` file with default settings so that you can easily customize (if you need to) the settings in it. The CLI will copy this file to the output directory when bundling your **Glue42 Core** files for deployment.
 
@@ -93,17 +93,17 @@ Below are described all available properties and settings in the `glue.config.de
 
 - #### glueAssets
 
-*Optional*. Defines the locations of all scripts and configurations that are part of the [**Glue42 Environment**](../environment/index.html). These settings are used by the `serve` command to correctly host all required files and also by the `build` command, to correctly compose your **Glue42 Core** bundle. It has the following properties:
+*Optional*. Defines the locations of all scripts and configurations that are part of the [**Glue42 Environment**](../environment/overview/index.html). These settings are used by the `serve` command to correctly host all required files and also by the `build` command, to correctly compose your **Glue42 Core** bundle. It has the following properties:
 
 | Property | Type | Description | Required | Default |
 |----------|------|-------------|----------|---------|
 | `worker` | `string` | The location of the shared worker script file. | No | `"./node_modules/@glue42/worker-web/dist/worker.js"` |
 | `gateway.location` | `string`| The location of the Glue42 Gateway script file. | No | `"./node_modules/@glue42/gateway-web/web/gateway-web.js"` |
-| `gateway.gwLogAppender` | `string` | The location of a [custom log appender file](../../../getting-started/setting-environment/advanced/index.html#extending_the_gateway_logging) for the Glue42 Gateway. | No | `-` |
+| `gateway.gwLogAppender` | `string` | The location of a [custom log appender file](../environment/overview/index.html#advanced-extending_the_gateway_logging) for the Glue42 Gateway. | No | `-` |
 | `config` | `string`| The location of the `glue.config.json` file. | No | `"./glue.config.json"` |
-| `route` | `string` | The base route where the [**Glue42 Environment**](../environment/index.html) files will be served by the dev server. | No | `"/glue"` |
+| `route` | `string` | The base route where the [**Glue42 Environment**](../environment/overview/index.html) files will be served by the dev server. | No | `"/glue"` |
 
-In the example below, the user has created a `/lib` directory and has decided to put there the deployment-ready files of the shared worker and the Glue42 Gateway. The Glue42 CLI will use these locations (for serving the files during development and for building the final **Glue42 Core** bundle) and will fail with an error if any of the files is missing. The user has also changed the default `route` to `"/shared/glue"`. This can be useful for keeping all shared resources (like images, scripts, styles, etc.) and all **Glue42 Core** files under the same base path. However, now all [**Glue42 Clients**](../glue42-client/index.html) need to be instructed where to find the [**Glue42 Environment**](../environment/index.html) files (see [Initializing a Glue42 Client: Custom Configuration](../glue42-client/index.html#initializing_a_glue42_client-custom_configuration)).
+In the example below, the user has created a `/lib` directory and has decided to put there the deployment-ready files of the shared worker and the Glue42 Gateway. The Glue42 CLI will use these locations (for serving the files during development and for building the final **Glue42 Core** bundle) and will fail with an error if any of the files is missing. The user has also changed the default `route` to `"/shared/glue"`. This can be useful for keeping all shared resources (like images, scripts, styles, etc.) and all **Glue42 Core** files under the same base path. However, now all [**Glue42 Clients**](../glue42-client/overview/index.html) need to be instructed where to find the [**Glue42 Environment**](../environment/overview/sindex.html) files (see [Initializing a Glue42 Client: Custom Configuration](../glue42-client/index.html#initializing_a_glue42_client-custom_configuration)).
 
 ```json
 {
