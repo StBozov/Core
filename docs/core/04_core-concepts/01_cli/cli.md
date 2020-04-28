@@ -1,6 +1,6 @@
 ## Overview
 
-The **Glue42 CLI** is a command line tool designed to simplify your development process with **Glue42 Core**. The CLI provides the following basic commands:
+The **Glue42 CLI** is a command line tool designed to simplify your development process with **Glue42 Core**. The Glue42 CLI provides the following basic commands:
 
 - `init` - quickly sets up your project with the necessary configurations and dependencies;
 - `serve` - launches a dev server which acts as a reverse proxy for your locally served applications;
@@ -17,7 +17,7 @@ npm install -g @glue42/cli-core
 
 ## Commands
 
-The Glue42 Core CLI offers several basic commands with no additional parameters. All the necessary configuration options are taken either from the `glue.config.dev.json` file in the current working directory (see [Configuration](#configuration) below) or from the built-in defaults.
+The Glue42 CLI offers several basic commands with no additional parameters. All the necessary configuration options are taken either from the `glue.config.dev.json` file in the current working directory (see [Configuration](#configuration) below) or from the built-in defaults.
 
 Below are described the available commands:
 
@@ -27,11 +27,12 @@ Below are described the available commands:
 gluec init
 ```
 
-The `init` command will set up **Glue42 Core** for the current directory. This means that the CLI will:
+The `init` command will set up **Glue42 Core** for the current directory. This means that the Glue42 CLI will:
 
 - install with `npm` (and perform `npm init --yes` beforehand if no `package.json` file is found) all necessary dependencies that provide the [**Glue42 Environment**](../environment/overview/index.html) files;
 - create a `glue.config.dev.json` file with default settings and correct paths for all **Glue42 Core** assets;
-- create a `glue.config.json` file with default settings so that you can easily customize (if you need to) the settings in it. The CLI will copy this file to the output directory when bundling your **Glue42 Core** files for deployment.
+- create a `glue.config.json` file with default settings so that you can easily customize (if you need to) the settings in it. The Glue42 CLI will copy this file to the output directory when bundling your **Glue42 Core** files for deployment.
+- create a `glue.core.cli.log` file which will contain the log output of the [**Glue42 CLI**](../../cli/index.html) if you set the `logging` setting in the `glue.config.dev.json` to `"full"`.
 
 - #### serve
 
@@ -59,7 +60,7 @@ The `version` command returns the currently installed version of the Glue42 CLI.
 
 ## Configuration
 
-The configuration settings for the Glue42 CLI are located in the `glue.config.dev.json` file that is automatically created when initializing your **Glue42 Core** project with the `init` command. This file must be located at top-level of the working directory from which the CLI commands are executed. The settings and configurations in this file allow the Glue42 CLI to correctly serve your applications and compose the final **Glue42 Core** bundle ready for production.
+The configuration settings for the Glue42 CLI are located in the `glue.config.dev.json` file that is automatically created when initializing your **Glue42 Core** project with the `init` command. This file must be located at top-level of the working directory from which the Glue42 CLI commands are executed. The settings and configurations in this file allow the Glue42 CLI to correctly serve your applications and compose the final **Glue42 Core** bundle ready for production.
 
 Below is the default configuration in the `glue.config.dev.json` file:
 
@@ -213,7 +214,7 @@ In the example below, the user declares a `/common` directory which contains sha
 
 - #### logging
 
-This is an *optional* property that specifies the level of logging for the CLI. When omitted or set to `"default"`, the CLI will output informational logs and errors *only* to the console. Other possible settings are:
+This is an *optional* property that specifies the level of logging for the Glue42 CLI. When omitted or set to `"default"`, the Glue42 CLI will output informational logs and errors *only* to the console. Other possible settings are:
 
 - `"dev"` - outputs only to the console, but includes trace information too;
 - `"full"` - outputs everything (info, trace, errors) to the console *and* to a log file named `glue.core.cli.log` located at the root project directory.

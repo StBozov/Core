@@ -1,259 +1,249 @@
 ## Overview
 
-Setting up the environment means creating the correct configuration files and serving them together with the rest of the environment parts. 
-
-There are two ways to get yourself set up. The first one is to use our [**CLI**](../../cli/index.html) tool, which will get all the required dependencies and scaffold default configuration files for you. The **Glue42 Core** [**CLI**](../../cli/index.html) tool greatly facilitates and simplifies the process of setting up your development environment and bundling it for deployment. The second one is to do everything manually. We recommend sticking with the [**CLI**](../../cli/index.html), because it greatly simplifies the setup procedure and lets you focus on building a great app. On the other hand, if you require really fine-grained control over your app development setup, maybe because you use some very custom tools, then you can skip over to the manual section.
+Setting up the **Glue42 Environment** means creating a correct configuration file and serving it together with the rest of the Environment files - the [**Glue42 Gateway**](../overview/index.html#glue42_gateway) and the [**Shared Worker**](../overview/index.html#shared_worker) scripts. You can set up the Glue42 Environment in two ways - using the [**Glue42 CLI**](../../cli/index.html) tool or manually. The Glue42 CLI greatly facilitates and simplifies the process of setting up your development environment and bundling it for deployment. It installs the necessary dependencies and creates an initial basic configuration file with default settings. It is highly recommended to use the Glue42 CLI as it makes the setup procedure fast and easy and lets you focus on building a great app. On the other hand, if you require a more fine-grained control over your setup (maybe because you use some very custom tools), then you can go to the [Manual](#manual) section.
 
 ## Single and Multiple Apps
 
-As a prerequisite you need to have the `@glue42/cli-core` package globally installed on your machine. Alternatively you can include it as a dev dependency for your app. It is up to you, but the following steps will assume that you have it globally installed:
+This section explains how to set up and serve your Glue42 Environment files using the [**Glue42 CLI**](../../cli/index.html) for projects consisting of one or more applications.
+
+As a prerequisite, you need to have the `@glue42/cli-core` package installed globally on your machine:
 
 ```javascript
 npm install --global @glue42/cli-core
 ```
 
-### Step One
+### Initiating the Project
 
-First, you need to get all the [**Glue42 Environment**](../overview/index.html) files and scaffold the config files. Go to your application's root directory. This could be an existing application or a freshly created one with `ng new` or `npx create-react-app`, for example. Open a terminal and:
-
-```javascript
-gluec init
-```
-
-This will `npm install --save` the necessary files. If, for some reason, npm is not initialized in your directory, this command will also init it with basic `--yes` settings.
-
-As a result you will have a few more packages included in your `./node_modules` directory and on root level you will find three new files
-- `glue.config.dev.json` - this is the config used by the [**CLI**](../../cli/index.html), containing default settings.
-- `glue.config.json` - this is config used by the [**Glue42 Clients**](../../glue42-client/overview/index.html), containing default settings.
-- `glue.core.cli.log` - this is the log output of the [**CLI**](../../cli/index.html), if you've set the `full` logging setting in `glue.config.dev.json`.
-
-We are not going to go over the specifics of each file, because you can find all you need in the [**Glue42 Environment**](../overview/index.html) section.
-
-### Step Two
-
-Next, you need to tell the [**CLI**](../../cli/index.html) where to find your application and where to serve it. Here you have two options
-- You can serve your application using your framework's tools. For example, `ng serve` for Angular or `npm start` for React apps created with Create React App.
-- You can just build your application using yor framework's tools. For example, `ng build` for Angular or `npm run build` for React apps created with Create React App.
-
-Now, let's cover each of those scenarios.
-
-#### Served application
-
-If you choose to serve your application, you can take full advantage of your framework's built-in dev capabilities like fully configured dev server, live reloading and so on.
-
-As you know, by default Angular will serve you application at `localhost:4200`, while React will do so at `localhost:3000`. That's all great and you do not need to change any of it. The only thing you need to do is tell the [**Glue42 Core CLI**](../../cli/index.html) where to find your apps. To do that go to `glue.config.dev.json` and add a new object in the `apps` array:
-
-```json
-{
-    // some other stuff
-    "apps": [
-        {
-            "route": "/",
-            "localhost": {
-                "port": 3000 // this is the react default, for angular default change it to 4200
-            }
-        }
-    ]
-    // some other stuff
-}
-```
-
-This config tells the CLI that you want at `/` (root) the built-in dev server to proxy to `localhost:3000`.
-
-#### Built application
-
-If you don't want to use your framework's serving capabilities, you can just build your app and let the Glue42 Core dev server serve it for you from the file system. This is also helpful, if you are developing something quick and light using Vanilla JS and you don't really have a fully configured development server.
-
-First you need to build your app (`ng build` for Angular, `npm run build` for React) and then edit the `glue.config.dev.json`:
-
-```json
-{
-    // some other stuff
-    "apps": [
-        {
-            "route": "/",
-            "file": {
-                "path": "./path/to/built/app"
-            }
-        }
-    ]
-    // some other stuff
-}
-```
-
-This config tells the CLI that you want at `/` (root) the built-in dev server to serve your files from the chosen path.
-
-This option could be beneficial for users with less powerful computers, because the frameworks' files watching, rebuilding and live reloading functionalities can be CPU intensive.
-
-**Note!** Keep in mind that the `path` property should describe the location of your built app directory. For example `./dist/myapp`. Also, this property accepts absolute and relative paths.
-
-### Step Three
-
-Great, so right now you have your files ready, your app is either served or built and you have told the [**CLI**](../../cli/index.html) where to find your app. Next you need to start the built-in dev server, by
-
-```javascript
-gluec serve
-```
-
-This command parses the `glue.config.dev.json` and launches a light-weight dev server at `localhost:4242` (by default). If you navigate to `localhost:4242`, you will see what your app is served there. What's more the Angular and React live reloading functionality is also available (if you chose to serve your app).
-
-At first glace, the end result is pretty much the same as the one from `ng serve` or `npm start`. The difference is that apart from serving your app, we are also serving the [**Glue42 Environment**](../overview/index.html) and your app is ready to initiate the `@glue42/web` library and use all of the Glue42 Core capabilities.
-
-
-## Multiple Applications
-
-There are situations where your project is not a single app with multiple modules or components, but instead it is composed of multiple applications. Some created using Vanilla JS, others with React maybe Angular, etc. This is exactly the case where Glue42 Core and it's [**CLI**](../../cli/index.html) really expands your dev toolkit.
-
-Setting up a multi-app [**Glue42 Environment**](../../../what-is-glue42-core/core-concepts/environment/index.html) is easy and almost identical to the single-app environment set up. 
-
-If you are working on a multi-app project, then your file structure looks something like this
-
-```cmd
-/ProjectA
-    /ApplicationA-SRC
-    /ApplicationB-SRC
-    /ApplicationC-SRC
-    /shared
-```
-
-We will continue forward with the assumption that in our case:
-- ApplicationA-SRC is the source of a React app
-- ApplicationB-SRC is the source of an Angular app
-- ApplicationC-SRC is the source of a Vanilla JS app
-- shared is a directory which contains assets shared by all three apps, like fonts, icons, etc
-
-## CLI
-
-### Step One
-
-First, go to your project's root, in our case `/ProjectA` and initiate Glue42 Core:
+First, you need to get all [**Glue42 Environment**](../overview/index.html) files and create basic configuration files. Go to the root directory of your project - for single app projects, this will be the application root directory; for multi app projects, this will be the root directory which contains all apps and shared assets. Open a command prompt and run the following:
 
 ```javascript
 gluec init
 ```
 
-Naturally, we are doing this in the project root, not inside the applications like we did in **Single Application Set Up**. The output of this command will be identical - we have the dependencies in `./node_modules` and the three scaffolded Glue42 Environment files.
+The `init` command will set up **Glue42 Core** for the current directory. This means that the Glue42 CLI will:
 
-### Step Two
+- install with `npm` (and perform `npm init --yes` beforehand if no `package.json` file is found) all necessary dependencies that provide the [**Glue42 Environment**](../environment/overview/index.html) files;
+- create a `glue.config.dev.json` file with default settings and correct paths for all **Glue42 Core** assets;
+- create a `glue.config.json` file with default settings so that you can easily customize (if you need to) the settings in it. The Glue42 CLI will copy this file to the output directory when bundling your **Glue42 Core** files for deployment.
+- create a `glue.core.cli.log` file which will contain the log output of the [**Glue42 CLI**](../../cli/index.html) if you set the `logging` setting in the `glue.config.dev.json` to `"full"`.
 
-In **Single Application Set Up** we went through two basic scenarios - proxying to a served app or serving an app from the file system. All of this is completely valid, but this time, we can define in `glue.config.dev.json` multiple applications. On top of that we can mix them - some might be hosted by our framework of choice, other might just be built. Let's look at a practical example.
+*For detailed descriptions of the Environment files, see the [**Glue42 Environment: Overview**](../overview/index.html) section.*
 
-We will assume the following arrangement:
-- ApplicationA-SRC will be served by React at `localhost:3000`
-- ApplicationB-SRC will be served by Angular at `localhost:4200`
-- ApplicationC-SRC will be built at `/ApplicationC-SRC/dist`
+### Configuration
 
-Our goal is to have the following:
-- `localhost:4242` -> ApplicationA
-- `localhost:4242/apptwo` -> ApplicationB
-- `localhost:4242/appthree` -> ApplicationC
+Next, you need to configure the paths to your application(s) (and shared assets, if you are working on a multi app project) and the route(s) on which the Glue42 Core dev server to serve your project. 
 
-Here is how the `glue.config.dev.json` should look like:
+Use the `server.apps` property in the `glue.config.dev.json` file to specify the paths to your applications and the routes on which to be served. The `apps` key is an array of objects, each object representing configuration for a single application. Below is an example configuration of the `apps` property for a two app project:
+
 ```json
-{
-    // some other stuff
-    "apps": [
-        {
-            "route": "/",
-            "localhost": {
-                "port": 3000
-            }
-        },
-        {
-            "route": "/apptwo/",
-            "localhost": {
-                "port": 4200
-            }
-        },
-        {
-            "route": "/appthree",
-            "file": {
-                "path": "./ApplicationC-SRC/dist"
-            }
+"apps": [
+    {
+        "route": "/",
+        "file": {
+            "path": "./client-list"
         }
-    ]
-    // some other stuff
-}
+    },
+    {
+        "route": "/client-portfolio/",
+        "localhost": {
+            "port": 3000
+        }
+    }
+]
 ```
 
-Like we explained in **Single Application Set Up**, you are free to choose between serving your app with it's framework's tools or simply building it and letting [**Glue42 CLI**](../../cli/index.html) serve it from the file system.
+#### Application Locations
 
-Before we continue, we need to tell our Angular app (ApplicationB) that it is no longer served at root. By default React, Angular and basically any other framework will configure their assets, scripts, client-side routing logic, etc as if the app is served at root level. This makes sense from the frameworks' perspective, but in our case, ApplicationB is served from a route `/apptwo/`. This is framework-specific and has nothing to do with Glue42 Core, but we will explain it for Angular and React.
+You have the options to: 
 
-#### React
+- serve your applications using your framework tools (e.g., `ng serve` for Angular, or `npm start` if you are using Create React App) and configure the Glue42 Core dev server to find your apps at the respective ports;
+- build your applications with your framework tools (e.g., `ng build` for Angular, or `npm run build` if your are using Create React App) and configure the Glue42 Core dev server to serve your apps from the respective locations;
 
-If you have a standard app created by Create React App, then you need to two things.
+When you have a multi app project, you can, of course, mix both configuration scenarios, so that the Glue42 Core dev server will serve some of your apps from the file system and proxy to other apps that are already hosted at specific ports.
 
-First go to the `package.json` and add:
+Both scenarios are explained below:
+
+- **Already Hosted Apps**
+
+You can choose to host your application using your framework tools in order to take full advantage of the built-in development capabilities of your framework. In this case, all you need to do is configure the Glue42 Core dev server where to find your apps. By default, Angular uses port 4200 of `localhost`, and React uses port 3000.
+
+Go to the `glue.config.dev.json` file and add a new object in the `apps` array. In the `localhost.port` property specify the port at which your application is already hosted:
 
 ```json
 {
-    "homepage": "/apptwo/"
+    "glueAssets": ...,
+    "server": {
+        ...
+        "apps": [
+            {
+                "route": "/",
+                "localhost": {
+                    // Default for React. Change to 4200 for Angular.
+                    "port": 3000 
+                }
+            }
+        ]
+    },
+    "logging": ...
 }
 ```
 
-This will instruct React to search of assets at `/apptwo/...`, instead of `/...`.
+The example above will configure the Glue42 Core dev server so that when you navigate to `/` (root), the server will proxy to `localhost:3000`.
 
-Second, you need to tell the React Router that the basename is no longer `/`. This looks like this:
+- **Built Apps**
+
+You can also build your app and let the Glue42 Core dev server serve it for you from the file system. This is helpful if you are developing a light JavaScript app and you don't have a fully configured development server.
+
+Build your app and add a configuration object to the `server.apps` array in the `glue.config.dev.json` file. This time, in the `file.path` property of the configuration object, specify the path (relative or absolute) to your built application:
+
+```json
+{
+    "glueAssets": ...,
+    "server": {
+        ...
+        "apps": [
+            {
+                "route": "/",
+                "file": {
+                    // Path to the built app (relative or absolute).
+                    "path": "./client-list/dist" 
+                }
+            }
+        ]
+    },
+    "logging": ...
+}
+```
+
+The example above will configure the Glue42 Core dev server so that when you navigate to `/` (root), the server will host your app files from the specified path.
+
+#### Serving Routes
+
+From the `route` property of each configuration object in the `server.apps` array you can specify the route at which you want your app to be served. This allows you to specify different routes (at the same domain, host and port) for different apps. 
+
+*Note that the Glue42 CLI does not currently support deeper levels of routes (e.g., `route: "/apps/client-list/"` will not work). Please, use only single level routes (e.g., `route: "/client-list/"`)*
+
+*Note that if your app is already hosted by another framework (Angular, React, etc.) and you want the Glue42 Core dev server to serve it at a route that is different from the default root route of that framework (e.g., you have an Angular "Client Portfolio" application and you want to serve it at `/client-portfolio/` instead of at `/`), you need to specify the new root route in the respective framework configuration (see details below for [React](#react) and [Angular](#angular)).*
+
+**Important** for all frameworks: *In the case when your app is already hosted by your framework, it is mandatory that the base route you specify in the `glue.config.dev.json` be identical to the one you specify in your framework configuration and that the route **start and end** with a slash (`/`).*
+
+Let's say your project consists of three apps:
+
+- a built "Client List" app, which you want to serve from the file system at `/`;
+- a React "Client Contact" app that is already hosted at port 3000 by the React framework and you want to serve it at `/client-contact/`;
+- an Angular "Client Portfolio" app that is already hosted at port 4200 by the Angular framework and you want to serve it at `/client-portfolio/`;
+
+Here is how the configuration in your `glue.config.dev.json` should look like:
+
+```json
+{
+    "glueAssets": ...,
+    "server": {
+        ...
+        "apps": [
+            {
+                "route": "/",
+                "file": {
+                    "path": "./client-list/dist"
+                }
+            },
+            {
+                "route": "/client-contact/",
+                "localhost": {
+                    "port": 3000
+                }
+            },
+            {
+                "route": "/client-portfolio/",
+                "localhost": {
+                    "port": 4200
+                }
+            }
+        ]
+    },
+    "logging": ...
+}
+```
+
+As mentioned above, you need to change the framework specific configuration for the base route, as both the Angular and the React app will be served at a route different from the default root (`/`) route for Angular and React.
+
+- #### React
+
+If you have a standard React app created with Create React App, then you need to do the following:
+
+- go to the `package.json` file of your app and add:
+
+```json
+{
+    "homepage": "/client-contact/"
+}
+```
+
+This will instruct React to search for assets at `/client-contact/`, instead of at `/`.
+
+- instruct the React Router that the `basename` is no longer `/`, but `/client-contact/`:
 
 ```javascript
-<BrowserRouter basename="/apptwo/" />
-<Link to="/today"/> // renders <a href="/apptwo/today">
+<BrowserRouter basename="/client-contact/" />
+
+// Will render <a href="/client-contact/notes">.
+<Link to="/notes" />
 ```
 
-#### Angular
+- #### Angular
 
-In Angular your achieve the same by going to the `angular.json` and adding `baseHref` next to our `outputPath` and `index`
+Go to the `angular.json` file of your project and add a `baseHref` property next to the `outputPath` and `index` properties:
 
 ```json
 {
-    "outputPath": "dist/appone",
+    "outputPath": "dist/client-portfolio",
     "index": "src/index.html",
     "main": "src/main.ts",
-    "baseHref": "/apptwo/",
+    "baseHref": "/client-portfolio/",
 }
 ```
 
-**Note** that in some cases you might also need to specify `deployUrl` next to `baseHref`.
+*Note that in some cases you may also need to specify `deployUrl` next to `baseHref`.*
 
-**Important for all frameworks!** Notice that everywhere we specified the new base with **starting** and **ending** slashes `/apptwo/`. It is important to include both.
+#### Shared Assets
 
-**Important for all frameworks!** We used `/apptwo/` as base value, because this is the route value we used in `glue.config.dev.json` in the example above. Keep in mind that the `route` value in `glue.config.dev.json` and base value you configure should be identical.
-
-**Important for all frameworks!** Currently version 1.0.0 of the CLI does **not** support deep levels of app route declaration. Meaning that `"route": "/myapps/apptwo"` is not currently supported. Please stick to only one level of depth: `"route": "/apptwo"`.
-
-After we have configured the applications, we need to either serve or build them. In our example we are serving both the React and Angular apps with their respective built-in tools.
-
-### Step Three
-
-Great, so we have our apps declared in `glue.config.dev.json` and the necessary configurations for baseHref and routing are also done. Let's start the dev server:
-
-```javascript
-gluec serve
-```
-
-The server fires up at port `4242` and indeed all of our apps are at the expected locations. Furthermore, because we proxied to the Angular and React apps which are served by their respective built-in servers, we have fully working Life Reloading (as configured per app).
-
-**Note** that any client-side routing you might have will still be working as expected.
-
-### Shared Assets
-
-When you are working on a multi-app project, it is natural to have some assets shared by all apps. If you wish the Glue42 Core CLI dev server to also serve those assets, you can easily set this up in the `glue.config.dev.json`. Here is how.
+If you are working on a multi app project, it is natural to have some assets shared by all apps. If you wish the Glue42 Core CLI dev server to serve these files, add a configuration object to the `server.sharedAssets` array in the `glue.config.dev.json` file:
 
 ```json
 {
+    "glueAssets": ...,
     "server": {
+        ...
         "sharedAssets": [
             {
                 "route": "/shared",
                 "path": "./shared/"
+            },
+            {
+                "route": "/favicon.ico",
+                "path": "./favicon.ico"
             }
         ]
     },
+    "logging": ...
 }
 ```
 
-You can use this to define entire directories like we have done, or you can just specify individual files.
+You can define entire directories with shared files, or individual shared files, as in the example above.
+
+### Serving the Project
+
+After all necessary configuration is ready, you can start the Glue42 Core dev server from the Glue42 CLI:
+
+```javascript
+gluec serve
+```
+
+This command launches a light-weight dev server at `localhost` with the settings specified in the `glue.config.dev.json` file.
+
+At first glance, the end result is pretty much the same as the one from `ng serve` or `npm start`. The difference is that apart from serving your app, we are also serving the [**Glue42 Environment**](../overview/index.html) files and your app is ready to initiate the [Glue42 Web](../../../../reference/core/latest/glue42%20web/index.html) library and access all Glue42 Core capabilities.
+
+*Note that any client-side routing you may have will still be working as expected.*
 
 ## Manual
 

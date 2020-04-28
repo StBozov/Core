@@ -112,7 +112,7 @@ const initOptions = {
     }
 };
 
-// Attach the object returned from the factory function to the `window` object 
-// in order to access the Glue42 Web APIs through it.
+// Use the object returned from the factory function
+// to access the Glue42 Core APIs
 window.glue = await GlueWeb(initOptions);
 ```

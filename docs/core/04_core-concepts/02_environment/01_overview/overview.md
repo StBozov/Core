@@ -4,9 +4,9 @@ The **Glue42 Core** Environment is a set of JavaScript and JSON files. These fil
 
 The environment consists of the following files:
 
-- [**Shared Worker**](#shared_worker) - a [shared worker](https://developer.mozilla.org/en-US/docs/Web/API/SharedWorker) that functions as a central point to which all [**Glue42 Clients**](../../glue42-client/overview/index.html) to connect;
-- [**Glue42 Gateway**](#glue42_gateway) - a script that handles the communication between all [**Glue42 Clients**](../../glue42-client/overview/index.html);
 - [**Configuration File**](#configuration_file) - an *optional* JSON configuration file that is used to define **Glue42 Core** settings and defaults;
+- [**Glue42 Gateway**](#glue42_gateway) - a script that handles the communication between all [**Glue42 Clients**](../../glue42-client/overview/index.html);
+- [**Shared Worker**](#shared_worker) - a [shared worker](https://developer.mozilla.org/en-US/docs/Web/API/SharedWorker) that functions as a central point to which all [**Glue42 Clients**](../../glue42-client/overview/index.html) to connect;
 
 Environment requirements:
 
@@ -15,7 +15,7 @@ Environment requirements:
 
 *Due to the current limitations of the [Shared Worker](https://developer.mozilla.org/en-US/docs/Web/API/SharedWorker) interface, it is recommended that all three files reside in the same directory within your project.*
 
-For step-by-step guides and examples on how to set up the Environment files, see the [Glue42 Environment: Setup](../setup/index.html) section.
+All files are described in more detail below. For step-by-step guides and examples on how to set up the Environment files depending on your project requirements, see the [Glue42 Environment: Setup](../setup/index.html) section. 
 
 ## Configuration File
 
