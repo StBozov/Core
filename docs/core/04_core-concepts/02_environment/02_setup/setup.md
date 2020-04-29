@@ -247,103 +247,95 @@ At first glance, the end result is pretty much the same as the one from `ng serv
 
 ## Manual
 
-If you wish to set everything up on your own, because none of the built-in solutions fits you, then we got you covered too. Head over to the manual section of **Single Application Set Up**. The procedures and steps are identical with the only exception that you have to do them on project level, not on application level.
+You can also manually set up your [**Glue42 Environment**](../overview/index.html) if non of the built-in solutions suits your needs. The steps you need to take are the same for both single and multi application projects - simply remember to install the dependencies at the root directory of your project, which in a single app project is the application root directory, and in a multi app project is the root directory containing all applications and shared assets.
 
-However, bear in mind that setting up our example case (as defined in the beginning of this section) is harder than it seems, because the major requirement of Glue42 Core is that all Glue42 Clients and Glue42 Environment must be hosted on the same domain and port.
+*Before you begin, remember that you can also use partially the Glue42 CLI to install the necessary dependencies and create a basic configuration file through the `gluec init` command. After that, you can edit and serve the files with your own dev server and custom settings.*
 
-## Manual
+### Installing the Dependencies
 
-## Overview
-
-Maybe you don't like using scaffolding tools or maybe you just have a complex and custom case, and the built-in functionality just doesn't suite you. No problem, now we will go through manually setting your [**Glue42 Environment**](../overview/index.html).
-
-### Step One
-
-Go to your application's root and install the necessary Glue42 Core dependencies:
+Go to the root directory of your project and install the necessary Glue42 Core dependencies:
 
 ```javascript
 npm install --save @glue42/gateway-web @glue42/worker-web
 ```
 
-### Step Two
+### Configuration
 
-Now you have to create the `glue.config.json` and define all the properties you need. You can get a detailed information on the available properties in the [**Glue42 Environment**](../overview/index.html) section.
+Now, you have to create a `glue.config.json` configuration file and define the properties you need. For detailed information on the available properties in the configuration file, see the [**Glue42 Environment: Overview**](../overview/index.html#configuration_file) section.
 
-**Note** that this file is optional, so if you won't use it just skip this step and Glue42 Core will continue with defaults.
+Keep in mind that the configuration file is *optional*, so if you don't want to use such, skip this step and Glue42 Core will continue with the built-in defaults when initializing the [Glue42 Web](../../../../reference/core/latest/glue42%20web/index.html) library. You can specify that you will not use a configuration file and/or you can override the built-in default library settings when initializing a [**Glue42 Client**](../../glue42-client/overview/index.html).
 
-### Step Three
+### Serving Your Project
 
-Now you need to serve your application and the Glue42 Core Environment.
+Now you need to serve your project, which includes the Glue42 Core Environment files.
 
-By default:
-- Glue42 Clients will look for `/glue/glue.config.json` to get user-level configs.
-- Glue42 Clients will look for `/glue/worker.js`
-- The worker will look for `/glue/gateway.js` and `/glue/glue.config.json`
+- #### Default Route
+
+Remember that by default:
+
+- Glue42 Clients will expect an *optional* configuration file named `glue.config.json` located at `./glue` to retrieve user-level configurations;
+- Glue42 Clients will expect a `worker.js` file located at `./glue`;
+- the Shared Worker will expect a `gateway.js` (and an *optional* `glue.config.json`, if you have provided one) file located at `./glue`;
+
+To change these defaults, see [**Glue42 Client: Initializing a Glue42 Client**](../../core-concepts/glue42-client/overview/#initializing_a_glue42_client).
 
 You should serve:
-- the gateway from `./node_modules/@glue42/gateway-web/web/gateway-web.js`
-- the worker from `./node_modules/@glue42/worker-web/dist/worker.js`
 
-If you don't want to use a `glue.config.json`, then you need to specify that when initializing a [**Glue42 Client**](../../glue42-client/overview/index.html).
+- the Glue42 Gateway script from `./node_modules/@glue42/gateway-web/web/gateway-web.js`;
+- the Shared Worker script from `./node_modules/@glue42/worker-web/dist/worker.js`;
 
-If you would like to serve the Glue42 Core environment from a different route, for example from `/my/other/assets/`, then you need to:
-- serve all environment assets at the same level (so that they are siblings)
-- configure the [**Glue42 Clients**](../../glue42-client/overview/index.html) to look for a config or a worker at the right route.
+- #### Custom Route
 
-Example with a `glue.config.json`:
+If you would like to serve the Glue42 Core environment from a different route, for example from `/assets/glue/`, then you need to:
 
-```cmd
-routes
-    /my/other/assets/worker.js
-    /my/other/assets/gateway.js
-    /my/other/assets/glue.config.json
-```
+- serve all Environment files at the same level (so that they are siblings);
+- configure all [**Glue42 Clients**](../../glue42-client/overview/index.html) to retrieve the Shared Worker file (and/or the *optional* configuration file) from the correct route;
+
+**Example with a configuration file:**
+
+Routes:
+
+- `/assets/glue/worker.js`
+- `/assets/glue/gateway.js`
+- `/assets/glue/glue.config.json`
+
+Glue42 Client configuration during initialization:
 
 ```javascript
-// Glue42 Client
-// Glue42Web config
+// This will configure the Glue42 Client app to retrieve
+// the configuration file from a custom location.
 const config = {
-    extends: "/my/other/assets/glue.config.json"
+    extends: "/assets/glue/glue.config.json"
 };
 ```
 
-Example without a `glue.config.json`:
+**Example without a configuration file:**
 
-```cmd
-routes
-    /my/other/assets/worker.js
-    /my/other/assets/gateway.js
-```
+Routes:
+
+- `/assets/glue/worker.js`
+- `/assets/glue/gateway.js`
+
+Glue42 Client configuration during initialization:
 
 ```javascript
-// Glue42 Client
-// Glue42Web config
+// This will configure the Glue42 Client app to expect
+// the Shared Worker script at a custom location.
 const config = {
-    worker: "/my/other/assets/worker.js"
+    worker: "/assets/glue/worker.js"
 };
 ```
-
-We touched on all major steps needed to manually set up your environment, but also keep in mind that you can partially use the [**CLI**](../../cli/index.html). You can use
-
-```javascript
-gluec init
-```
-
-Just to set up the necessary files for you and then you can serve them using your own dev setup.
 
 ## Advanced
 
-## Overview
+### Extending the Gateway Logging
 
-So far we have covered the default, straight forward initiation. But what if you need a little bit more control? By going over the `glue.config.dev.json` you can change the port of the dev server, the sources of the [**Glue42 Environment**](../overview/index.html) files, the logging of the [**CLI**](../../cli/index.html) and so on. If you are interested, head over to the [**CLI section**](../../cli/index.html).
+You can overwrite the default logging configuration of the Glue42 Gateway from the *optional* `glue.config.json` file. For most cases, this is not needed, because the Glue42 Gateway logs internal messages sent back and forth from [**Glue42 Clients**](../../glue42-client/overview/index.html). However, if you really need to, you can define:
 
-## Extending the Gateway Logging
+- logging level - `"trace" | "debug" | "info" | "warn" | "error"`, defaults to `"info"`
+- log appender - a function that receives a `LogInfo` object. By default it logs to the shared worker console, but your custom function can send those logs to a remote server, for example. 
 
-#### Gateway log appender
-
-You can overwrite the default logging configuration of the gateway from `glue.config.json`. For most cases this is not needed, because the gateway logs internal messages sent back and forth from [**Glue42 Clients**](../../glue42-client/overview/index.html). However, if you really need to, you can define:
-- log level - accepts: `"trace" | "debug" | "info" | "warn" | "error"`, defaults to: `info`
-- appender - a function that receives a **LogInfo** object. By default logs to the shared worker console, but your custom function can send those logs to a remote server, for example. The **LogInfo** object has a structure like this:
+The `LogInfo` object has the following structure:
 
 ```javascript
 {
@@ -357,9 +349,21 @@ You can overwrite the default logging configuration of the gateway from `glue.co
     message: 'Sending message {:domain "global", :type :error, :request_id nil, :peer_id nil, :reason_uri "global.errors.authentication.failure", :reason "Unknown authentication method "} to local peer'
 }
 ```
-The `output` key contains a processed message for direct output where the rest of the keys hold the details.
+The `output` key contains a processed message for direct output, whereas the rest of the keys hold the details.
 
-Example:
+#### Custom Log Appender Example
+
+Below is an example of creating and configuring a custom log appender. Keep in mind that you have to configure the `glue.config.dev.json` file (if you want the Glue42 Core dev server to use your custom log appender) and the `glue.config.json` file (to instruct the Glue42 Environment where to find your custom log appender).
+
+- First, you need to create your custom log appender. It should be a simple JavaScript function which receives a `LogInfo` object as a single argument. You can instruct the function to log to the console, send to a REST server, etc. Go to the root directory of your project, create a log appender file (e.g., `myLogAppender.js`) and define a logging function in it:
+
+```javascript
+self.myLog = (logInfo) => {
+    // Your custom logging logic here.
+};
+```
+
+- Next, to instruct the Glue42 Environment where to find your custom log appender, edit the `gateway` top-level key of the `glue.config.json` file to specify logging level and the location of your custom log appender:
 
 ```json
 {
@@ -368,61 +372,29 @@ Example:
         "logging": {
             "level": "trace",
             "appender": {
-                "location": "./gwLogAppender.js",
-                "name": "log"
+                "location": "./myLogAppender.js",
+                // Notice that this is the name of the JavaScript function iyou have defined in `myLogAppender.js`.
+                "name": "myLog" 
             }
         }
     }
 }
 ```
 
-```javascript
-// ./gwLogAppender.js
-self.log = (logInfo) => {
-    // your custom log logic here
-}
-```
-#######################################
-You can get detailed information on what the gateway is from the [**Glue42 Environment**](../overview/index.html) section. Here we will explain how you can extend it's logging functionality. Normally this is something you do not need to to, because the gateway logs internal messages to and from [**Clients**](../../glue42-client/overview/index.html), but obtaining this information could be useful for creating bug issues in [**our GitHub**](https://github.com/Glue42/core/issues) or just to get a better understanding on what's going on behind the scenes.
-
-First, you need to create an `appender`. This is a simple JS function which takes as a single argument the log info object and does with it whatever you need - log to the console, send to a REST server, etc. To do that, go to your application's root and create:
-
-```javascript
-// ./gwLogAppender.js
-self.myLog = (logInfo) => {
-    // your log logic here
-};
-```
-
-Next, go to `glue.config.dev.json` to tell the CLI that there is an appender:
+- If you want to use your custom log appender during development with the Glue42 Core dev server, go to `glue.config.dev.json` and edit the `glueAssets.gateway` property to specify the location of your custom log appender:
 
 ```json
 {
-    // some other stuff
     "glueAssets": {
         "gateway":{
+            ...
             "gwLogAppender": "./gwLogAppender.js"
-        }
-    }
-    // some other stuff
+        },
+        ...
+    },
+    "server": ...,
+    "logging": ...
 }
 ```
 
-Finally go to `glue.config.json` to tell the runtime [**Environment**](../overview/index.html), what there is a custom appender:
-
-```json
-{
-    // some other stuff
-    "gateway":{
-        "logging": {
-            "appender": {
-                "name": "myLog", // notice that this is the name of the JS function in ./gwLogAppender.js,
-                "location": "./gwLogAppender.js"
-            }
-        }
-    }
-    // some other stuff
-}
-```
-
-Now, when you `gluec serve`, the appender will be hosted and it will be detected by the runtime [**Environment**](../overview/index.html).
+Now, when you execute the `gluec serve` command from the Glue42 CLI, the log appender file will be hosted and will be detected by the runtime [**Glue42 Environment**](../overview/index.html).
