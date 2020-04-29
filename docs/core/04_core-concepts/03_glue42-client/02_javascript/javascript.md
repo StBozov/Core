@@ -1,40 +1,70 @@
 ## Overview
 
-We have already covered how to set up your environment for a [Single Application](../../setting-environment/single-application/index.html) and [Multiple Applications](../../setting-environment/multiple-applications/index.html). Now we will take a look at how to initialize a simple Vanilla JS app as a [Glue42 Client](../../../what-is-glue42-core/core-concepts/glue42-client/index.html).
+This guide will show you how to initialize the [Glue42 Web](../../../../reference/core/latest/glue42%20web/index.html) library in a simple JavaScript app in order to make it a Glue42 Client.
 
-We will assume that the application is a simple, light app, with just an index.html and a couple of JS files.
+## Referencing Glue42 Web
 
-## Prerequisites
+The [**Glue42 Web**](../../../../reference/core/latest/glue42%20web/index.html) library provides the connection between your apps and the [**Glue42 Environment**](../../environment/overview/index.html). You can install the `@glue42/web` package from `npm` and reference the library file directly, or reference the Glue42 Web library in your web apps with a link to `UNPKG`.
 
-We will assume that this is the only application in the project and that you already completed the environment setup. Next we need to reference `@glue42/web` in the `index.html` which will connect our client to the [environment](../../../what-is-glue42-core/core-concepts/environment/index.html) and give us access to the [Glue42 Web API](../../../../reference/core/latest/glue42%20web/index.html).
+- From `npm`:
 
-## Set up Glue42 Web
+Install the `@glue42/web` package in the root directory of your project:
 
-The easiest way to use unpkg.
+```cmd
+npm install @glue42/web
+```
+
+Reference the library in your web app:
+
+```html
+<script src="./node_modules/@glue42/web/dist/web.umd.js">
+```
+
+- From `UNPKG`:
+
+Reference the library in your web app:
 
 ```html
 <script src="https://unpkg.com/@glue42/web@latest/dist/web.umd.js"></script>
-<script src="./index.js">
 ```
 
-We are using `web.umd.js` just to keep it simple, this script will attach a factory function `GlueWeb` to the `window` object.
+Referencing the Glue42 Web library script will attach a `GlueWeb()` factory function to the `window` object.
 
-Next we go to the `./index.js`, which in our example is just a simple JS file with an `init` method and we initialize Glue42 Web.
+## Initialization
+
+You have to initialize the Glue42 Web library by invoking the exposed `GlueWeb()` factory function. It accepts an *optional* [`Config`](../../../../reference/core/latest/glue42%20web/index.html#!Config) object in which you can specify settings regarding the [**Glue42 Environment**](../../environment/overview/index.html) files (the *optional* `glue.config.json` file and the Shared Worker script), as well as settings related to saving and restoring the application window layout and context. All available settings for the `Config` object are explained in detail in the [**Glue42 Client: Overview**](../overview/index.html) section.
+
+Below is an example of initializing the Glue42 Web library with the default settings:
 
 ```javascript
-const init = async () => {
-
-    const glue = await window.GlueWeb();
-
-    // here glue is initialized, the app has connected to the Glue42 Environment
-    // your custom app logic here
-};
-
-init().catch(console.error);
+// Use the object returned from the factory function
+// to access the Glue42 Core APIs
+const glue = await GlueWeb();
 ```
 
-When `GlueWeb()` resolves, we get a `glue` object which we can use to access the full [Glue42 Web API](../../../../reference/core/latest/glue42%20web/index.html). By default we are not required to pass a config object to `GlueWeb()`, but if you wish you can do so. Check out the [Glue42 Client](../../../what-is-glue42-core/core-concepts/glue42-client/index.html) section for more info on the possible options.
+In your application, go to the `index.js` file and initialize the Glue42 Web library:
 
-That's it, the application is now configured as a [Glue42 Client](../../../what-is-glue42-core/core-concepts/glue42-client/index.html) and can connect to the [Glue42 Environment](../../../what-is-glue42-core/core-concepts/environment/index.html).
+```javascript
+const initializeGlue42 = async () => {
 
-What remains now is to serve it. You can do that with your own server or you can use the [Glue42 Core CLI](../../../what-is-glue42-core/core-concepts/cli/index.html) as we have shown in the [Single Application](../../setting-environment/single-application/index.html) setup page.
+    // Example initialization options.
+    const initOptions = {
+        extends: false,
+        worker: "./lib/worker.js",
+        layouts: {
+            autoRestore: true,
+            autoSaveWindowContext: true
+        }
+    };
+
+    // Use the object returned from the factory function
+    // to access the Glue42 Core APIs
+    const glue = await GlueWeb(initOptions);
+
+    // Here Glue42 Web is initialized and you can access all Glue42 Core APIs
+};
+
+initializeGlue42().catch(console.error);
+```
+
+Your application is now configured as a Glue42 Client and can connect to the [Glue42 Environment](../../core-concepts/environment/overview/index.html). You can serve your app with your own server or you can use the Glue42 Core dev server via the [Glue42 Core CLI](../../core-concepts/cli/index.html).

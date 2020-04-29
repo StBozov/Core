@@ -267,7 +267,7 @@ Keep in mind that the configuration file is *optional*, so if you don't want to 
 
 ### Serving Your Project
 
-Now you need to serve your project, which includes the Glue42 Core Environment files.
+Now you need to serve your project, which includes the Glue42 Environment files.
 
 - #### Default Route
 
@@ -286,7 +286,7 @@ You should serve:
 
 - #### Custom Route
 
-If you would like to serve the Glue42 Core environment from a different route, for example from `/assets/glue/`, then you need to:
+If you would like to serve the Glue42 Environment files from a different route, for example from `/assets/glue/`, then you need to:
 
 - serve all Environment files at the same level (so that they are siblings);
 - configure all [**Glue42 Clients**](../../glue42-client/overview/index.html) to retrieve the Shared Worker file (and/or the *optional* configuration file) from the correct route;
@@ -333,7 +333,7 @@ const config = {
 You can overwrite the default logging configuration of the Glue42 Gateway from the *optional* `glue.config.json` file. For most cases, this is not needed, because the Glue42 Gateway logs internal messages sent back and forth from [**Glue42 Clients**](../../glue42-client/overview/index.html). However, if you really need to, you can define:
 
 - logging level - `"trace" | "debug" | "info" | "warn" | "error"`, defaults to `"info"`
-- log appender - a function that receives a `LogInfo` object. By default it logs to the shared worker console, but your custom function can send those logs to a remote server, for example. 
+- log appender - a function that receives a `LogInfo` object. By default it logs to the Shared Worker console, but your custom function can send those logs to a remote server, for example. 
 
 The `LogInfo` object has the following structure:
 
