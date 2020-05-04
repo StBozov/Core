@@ -14,40 +14,38 @@ In the next sections, you can see examples of using the Interop API. You can ope
 
 ## Opening Windows
 
-10 - Show window open with passing context and/or size
-	- Idea: Showcase simple window open with basic configuration - context, size and position
-	- Apps: 
-		- A: Has a button to open a new window and options to type in name (required), context, size and position for the new window.
-		- (the new window): When opened displays it's URL and context, if provided
+The application below demonstrates opening a new window with basic configuration (context, size, position) by using the [`open()`](../../../reference/core/latest/windows/index.html#!API-open) method of the Window Management API.
+
+Use the input fields in App A to assign a name (required) to the new window and set the window context, size and position. Click the "Open Window" button to open a new window.
 
 <!-- example 10 -->
 
 ## Window Discovery
 
-11 - Show discovering windows by iterating list
-	- Idea: Showcase windows discovery by name.
-	- Apps:
-		- A: Extends A from (10). Has an input field and seach button. The user can type in window name and on search click, will print on page the ID of the found window and provided context, if any
-		- (the new window): Same as (10)
+The application below demonstrates discovering a window by name.
+
+Open several new windows by using the input fields in App A to assign a name (required) to the new window and set the window context, size and position. Click the "Open Window" button to open a new window.
+
+Input the name of the window you want to search for and click the search button. If a window with the specified name is found, its ID and context (if available) will be printed on the page.
 
 <!-- example 11 -->
 
 ## Window Events
 
-12 - Show window add/remove notifications by events subscription
-	- Idea: Give example of window add and remove events.
-	- Apps:
-		- A: Extends A from (11). on load subscribes to window added/removed events and prints to the page every time a window was opened/closed.
-		- (the new window): Same as (10)
+The application below demonstrates handling window events - opening/closing windows.
+
+On load, App A subscribes for the [`onWindowAdded()`](../../../reference/core/latest/windows/index.html#!API-onWindowAdded) and the [`onWindowRemoved()`](../../../reference/core/latest/windows/index.html#!API-onWindowRemoved) events of the Window Management API and will print to the page every time a new window is opened or an existing window is closed. 
+
+Open several new windows by using the input fields in App A to assign a name (required) to the new window and set the window context, size and position. Click the "Open Window" button to open a new window.
 
 <!-- example 12 -->
 
 ## Window Operations
 
-13 - Show control of an open window: size, bounds, context
-	- Idea: Illustrate manipulation of already opened window.
-	- Apps: 
-		- A: Extends A from (11). Instead of printing info about the found window, will provide controls to set a new size, position or context for that window.
-		- (the new window): Extends (10), now subscribes for context changes and prints the new data.
+The application below demonstrates manipulating already opened windows.
+
+Open several new windows by using the input fields in App A to assign a name (required) to the new window and set the window context, size and position. Click the "Open Window" button to open a new window.
+
+Use the "Open Window" and "Update Window" radio buttons to toggle between the options for creating new windows and updating existing ones. Select the "Update Window" option, select from the dropdown menu a window to update and set new position, size and/or context for the selected window. Click "Update Window" button to update the selected window.
 
 <!-- example 13 -->

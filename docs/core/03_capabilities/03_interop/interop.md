@@ -15,22 +15,17 @@ In the next sections, you can see examples of using the Interop API. You can ope
 
 ## Registering and Invoking Methods
 
-1 - Show register and invoke
-	- Idea: Display basic interop between two applications
-	- Apps: 
-		- A: Has a button "Invoke", when clicked invokes method "G42Core.Basic" with no args. When the invokation returns a result, displays the content on the page.
-		- B: OnLoad registers a method with hardcoded name "G42Core.Basic". When invoked, displays the timestamp of the invokation and returns the string "Hello from the other app".
+The applications below demonstrate how to register and invoke Interop methods using the [`register()`](../../../reference/core/latest/interop/index.html#!API-register) and [`invoke()`](../../../reference/core/latest/interop/index.html#!API-invoke) methods of the Interop API. 
+
+On load, App B registers a method called "G42Core.Basic". Click the "Invoke" button in App A to invoke this method and print the result from the method invocation (prints a timestamp and the message "Hello from App B.").
 
 <!-- example 1 -->
 
 ## Targeting
 
-2 - Show invoke targeting: best, instance or all
-	- Idea: Showcase specific instance targeting when an interop method has multiple servers.
-	- Apps: 
-		- A: Same as A in (1) (except now it has four buttons: `Default Invoke`, `Invoke All`, `Invoke ${appNameB}` and `Invoke ${appNameC}`)
-		- B: Same as B in (1) (except the return string is: `Hello from ${appNameB}`)
-		- C: Same as B in (1) (except the return string is: `Hello from ${appNameC}`)
+The applications below demonstrate targeting Interop servers when invoking Interop methods. 
+
+On load, Apps B and C register a method with the same name. Click one of the buttons in App A to invoke this method and print the result from the method invocation (prints a timestamp and a message from the respective app). There are four buttons - "Invoke Default" (invokes the method by targeting the server that has registered it first), "Invoke All" (invokes the method by targeting all servers offering it), "Invoke App B" (invokes the method by targeting App B) and "Invoke App C" (invokes the method by targeting App C). 
 
 <!-- example 2 -->
 
@@ -38,34 +33,27 @@ In the next sections, you can see examples of using the Interop API. You can ope
 
 ### Methods
 
-3 - Show method discovery by name
-	- Idea: Illustrate how to find a method by name and then invoke it
-	- Apps: 
-		- A: Has an input field and a button "Invoke". The user can type a method name in the input field and on button click the app will find the method with the provided name and will invoke it. If no method - will display an error message. the app will invoke the method with target 'all' and will display all returned values in the invokation result object.
-		- B: OnLoad registers a method with hardcoded name "one". Also has an input field and a button. The user can type in the input name of a method and on button click the app will register the method (will display a success message when ready). When a method was invoked will display the timestamp of the invokation and will return a string `Hello from ${methodName} in ${appName}`.
-		- C: Same as B, but the hardcoded method is "two".
+- #### Method Name
+
+The applications below demonstrate discovering Interop methods by method name. 
+
+Use App B and App C to register Interop methods by providing a method name. Input a method name in App A and click the "Invoke" button to invoke the method and print the result from the method invocation.
 
 <!-- example 3 -->
 
+- #### Method Added Event
 
+The applications below demonstrate discovering Interop methods by subscribing to the [`methodAdded()`](../../../reference/core/latest/interop/index.html#!API-methodAdded) event of the Interop API. 
 
-4 - Show method discovery by subscribing to methodAdded event
-	- Idea: Showcase how to get notified about a method
-	- Apps: 
-		- A: Same as A in (3), but now the app will subscribe to the `methodAdded` event and on event will display the name of the registered method.
-		- B: Same as B in (3) without the hardcoded method.
-		- C: Same as C in (3) without the hardcoded method.
+On load, App A subscribes to the `methodAdded()` event and will print the name of each newly registered method. Use App B and App C to register Interop methods by providing a method name.
 
 <!-- example 4 -->
 
 ### Servers
 
-5 - Show server discovery by method name
-	- Idea: Shows how to discover all the servers who have registered a method by given method name
-	- Apps: 
-		- A: Similar to A in (3), except on button click the app will find which servers register a method with the provided name and display them on the page. Will not invoke.
-		- B: Same as B in (3)
-		- C: Same as C in (3)
+The applications below demonstrate discovering Interop servers by method name. 
+
+Use App B and App C to register Interop methods by providing a method name. Input a method name in App A and click the "Find Servers" button to print the Interop servers that provide the method. 
 
 <!-- example 5 -->
 
@@ -73,36 +61,34 @@ In the next sections, you can see examples of using the Interop API. You can ope
 
 ### Publishing and Subscribing
 
-6 - Show publishing and subscribing
-	- Idea: Illustrate basic stream registration, publishing and subscription
-	- Apps: 
-		- A: Has a button "subscribe" - on click subscribes to "G42Core.Stream.Basic" and prints to the page the data received.
-		- B: on load creates a stream "G42Core.Stream.Basic". Has a button "Start Publishing" - toggles on/off data pushing. When "on" every 3 seconds will push to the stream "{time: timeStamp, message: 'Hello from publisher', count: ++Counter}".
+The applications below demonstrate publishing and subscribing for Interop streams. 
+
+On load, App B registers an Interop stream called "G42Core.Stream.Basic". Click the "Subscribe" button in App A to subscribe to the registered stream. Each time App A receives data, it will be printed on the page (time stamp, message and counter). Click the "Start Publishing" button in App B to start publishing data to the stream every 3 seconds.
 
 <!-- example 6 -->
 
 ### Events
 
-7 - Show stream notifications - subscriber added, subscriber removed, stream closed
-	- Idea: Showcases the various stream events used to notify when a subscriber was added/removed and a stream was closed
-	- Apps: 
-		- A: Extends A from (7). Has a button "unsubscribe", which unsubscribes from the stream. Listens for onClosed and prints to the page when the stream was closed.
-		- B: Extends B from (7). Has a button "close"/"create" - creates or closes the "G42Core.Stream.Basic" stream. Prints to the page when a new subscriber was added and/or removed.
+The applications below demonstrate handling streaming events - adding/removing subscribers and closing the stream. 
 
+Click the "Create Stream" button in App B to register an Interop stream called "G42Core.Stream.Basic". Click the "Subscribe" button in App A to subscribe to the registered stream - App B will print to the page when a new subscriber is added. Each time App A receives data, it will be printed on the page (time stamp, message and counter). Click the "Start Publishing" button in App B to start publishing data to the stream every 3 seconds. 
+
+Click the "Unsubscribe" in App A to close the subscription to the stream - App B will print to the page when a subscriber is removed. Click the "Close Stream" button in App B to close the stream - App A will print to the page when the stream is closed.
 
 <!-- example 7 -->
 
 ### Managing Subscriptions
 
-8 - Show accepting, rejecting, accepting on branch and pushing to branch/all
-	- Idea: Illustrates some options within createStream for managing subscription requests and subscriber grouping
-	- Apps: 
-		- A: Has a button "Subscribe" - subscribes to stream "G42Core.Stream.Basic". Prints subscription success or error. Prints the data received.
-		- B: Has a button "Subscribe" - subscribes to stream "G42Core.Stream.Basic". Prints subscription success or error. Prints the data received.
-		- C: on load creates stream "G42Core.Stream.Basic". 
-			When a new subscription request is received -> prints info + "Accept" + "Accept Private" + "Reject". 
-			When "Accept" - accepts on the default branch, when "Accept Private" accepts on branch "private". When reject, reject with message "Rejected from server".
-			When accepted replaces the buttons with text "Accepted on Default/Private".
-			Has two buttons: "Push" and "Push Private". On click of each will push "{time: timeStamp, message: 'Hello from publisher', count: ++Counter}" on either the default or private branches
+The applications below demonstrate handling stream subscriptions - accepting/rejecting subscriptions, grouping subscribers on branches, pushing data to all subscribers or to a specific stream branch.
+
+On load, App C registers an Interop stream called "G42Core.Stream.Basic". Click the "Subscribe" button in App A and App B to subscribe to the registered stream. App A and App B will print to the page subscription success or error messages, as well as the received data from the stream (time stamp, message and counter).
+
+When App C receives a new subscription request, it will print the subscription info on the page and show three buttons for the subscription: "Accept", "Accept on Private" and "Reject".
+
+- "Accept" - accepts the subscription on the default branch.
+- "Accept on Private" - accepts the subscription on a branch called "Private".
+- "Reject" - rejects the subscription.
+
+Use the "Push" and "Push to Private" buttons to push stream data to the default streaming branch (to all subscriptions) or to the "Private" branch.
 
 <!-- example 8 -->
