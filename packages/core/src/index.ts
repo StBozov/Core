@@ -13,6 +13,9 @@ import Interop from "./interop/interop";
 import { MessageBus } from "./bus/main";
 import { version } from "../package.json";
 import shortid from "shortid";
+import { Logger as PerfLogger } from "./monitoring/Logger";
+import { PerfManager } from "./monitoring/manager";
+import { PerfAgmFacade } from "./monitoring/agm";
 
 const GlueCore = (userConfig?: Glue42Core.Config, ext?: Glue42Core.Extension): Promise<Glue42Core.GlueCore> => {
     const gdVersion: number | undefined = Utils.getGDMajorVersion();
@@ -38,6 +41,8 @@ const GlueCore = (userConfig?: Glue42Core.Config, ext?: Glue42Core.Extension): P
     let _connection: Connection;
     let _interop: Interop;
     let _logger: Logger;
+    let _perfManager: PerfManager;
+    let _perfInteropFacade: PerfAgmFacade;
     let _metrics: Glue42Core.Metrics.API;
     let _contexts: Glue42Core.Contexts.API;
     let _bus: Glue42Core.Bus.API;
@@ -171,12 +176,21 @@ const GlueCore = (userConfig?: Glue42Core.Config, ext?: Glue42Core.Extension): P
         const agmConfig: InteropSettings = {
             connection: _connection,
             logger: _logger.subLogger("interop"),
+            perfLogger: _perfManager.logger
         };
 
         _interop = new Interop(agmConfig);
         Logger.Interop = _interop;
         registerLib(["interop", "agm"], _interop, initTimer);
         return Promise.resolve();
+    }
+
+    function setupMonitoring(): Promise<PerfManager> {
+        const initTimer = timer("monitoring");
+        _perfManager = new PerfManager();
+        _perfInteropFacade = new PerfAgmFacade(_perfManager);
+        registerLib("monitoring", _perfManager, initTimer);
+        return Promise.resolve(_perfManager);
     }
 
     function setupContexts() {
@@ -362,8 +376,10 @@ const GlueCore = (userConfig?: Glue42Core.Config, ext?: Glue42Core.Extension): P
     return preloadPromise
         .then(setupLogger)
         .then(setupConnection)
+        .then(setupMonitoring)
         .then(() => Promise.all([setupMetrics(), setupInterop(), setupContexts(), setupBus()]))
         .then(() => _interop.readyPromise)
+        .then(() => _perfInteropFacade.registerMethods(_interop))
         .then(() => {
             return setupExternalLibs(internalConfig.libs || []);
         })

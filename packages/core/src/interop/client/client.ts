@@ -28,7 +28,11 @@ export interface InvokeResultMessage {
 }
 
 export default class Client {
-    constructor(private protocol: Protocol, private repo: ClientRepository, private instance: Glue42Core.AGM.Instance, private configuration: InteropSettings) {
+    constructor(
+        private protocol: Protocol,
+        private repo: ClientRepository,
+        private instance: Glue42Core.AGM.Instance,
+        private configuration: InteropSettings) {
         //
     }
 
@@ -331,7 +335,6 @@ export default class Client {
                         returned: undefined,
                         status: undefined,
                     };
-
                     return Promise.reject(errorObj);
                 }
             }
@@ -365,7 +368,6 @@ export default class Client {
             if (allRejected) {
                 return Promise.reject(results);
             }
-
             return results;
         };
 

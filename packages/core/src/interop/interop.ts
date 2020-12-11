@@ -7,6 +7,8 @@ import ServerRepository from "./server/repository";
 import { UnsubscribeFunction } from "callback-registry";
 import gW3ProtocolFactory from "./protocols/gw3/factory";
 import { InstanceWrapper } from "./instance";
+import { Logger as PerfLogger } from "../monitoring/logger";
+import { PerfDomain } from "../monitoring/event";
 
 export default class Interop implements Glue42Core.AGM.API {
     public instance: Glue42Core.AGM.Instance;
@@ -17,6 +19,7 @@ export default class Interop implements Glue42Core.AGM.API {
     private protocol!: Protocol;
     private clientRepository: ClientRepository;
     private serverRepository: ServerRepository;
+    private perfLogger: PerfLogger;
 
     constructor(configuration: InteropSettings) {
         if (typeof configuration === "undefined") {
@@ -38,6 +41,7 @@ export default class Interop implements Glue42Core.AGM.API {
 
         // Initialize our modules
         InstanceWrapper.API = this;
+        this.perfLogger = configuration.perfLogger;
         this.instance = new InstanceWrapper(undefined, connection).unwrap();
         this.clientRepository = new ClientRepository(configuration.logger.subLogger("cRep"));
         this.serverRepository = new ServerRepository();
@@ -99,26 +103,62 @@ export default class Interop implements Glue42Core.AGM.API {
     }
 
     public subscribe(method: string, options: Glue42Core.AGM.SubscriptionParams, successCallback?: (subscription: Glue42Core.AGM.Subscription) => void, errorCallback?: (err: SubscribeError) => void): Promise<Glue42Core.AGM.Subscription> {
-        return this.client.subscribe(method, options, successCallback, errorCallback);
+        const metadata = { methodName: "subscribe", method, options };
+        const end = this.perfLogger.start({ domain: PerfDomain.Interop, metadata, ipc: true });
+
+        const result = this.client.subscribe(method, options, successCallback, errorCallback);
+
+        result.then(() => end.success()).catch(end.error);
+        return result;
     }
 
     public createStream(streamDef: string | Glue42Core.AGM.MethodDefinition, callbacks: Glue42Core.AGM.StreamOptions, successCallback?: (args?: object) => void, errorCallback?: (error?: string | object) => void): Promise<Glue42Core.AGM.Stream> {
-        return this.server.createStream(streamDef, callbacks, successCallback, errorCallback);
+        const metadata = { methodName: "createStream", streamDef };
+        const end = this.perfLogger.start({ domain: PerfDomain.Interop, metadata, ipc: true });
+
+        const result = this.server.createStream(streamDef, callbacks, successCallback, errorCallback);
+
+        result.then(() => end.success()).catch(end.error);
+        return result;
     }
 
     public unregister(methodFilter: string | Glue42Core.AGM.MethodDefinition): Promise<void> {
-        return this.server.unregister(methodFilter);
+        const metadata = { methodName: "unregister", methodFilter };
+        const end = this.perfLogger.start({ domain: PerfDomain.Interop, metadata, ipc: true });
+
+        const result = this.server.unregister(methodFilter);
+
+        result.then(end.success).catch(end.error);
+        return result;
     }
 
     public registerAsync(methodDefinition: string | Glue42Core.AGM.MethodDefinition, callback: (args: any, caller: Glue42Core.AGM.Instance, successCallback: (args?: any) => void, errorCallback: (error?: string | object) => void) => void): Promise<void> {
-        return this.server.registerAsync(methodDefinition, callback);
+        const metadata = { methodName: "registerAsync", methodDefinition };
+        const end = this.perfLogger.start({ domain: PerfDomain.Interop, metadata, ipc: true });
+
+        const result = this.server.registerAsync(methodDefinition, callback);
+
+        result.then(end.success).catch(end.error);
+        return result;
     }
 
     public register(methodDefinition: string | Glue42Core.AGM.MethodDefinition, callback: (args: any, caller: Glue42Core.AGM.Instance) => any | Promise<void>): Promise<void> {
-        return this.server.register(methodDefinition, callback);
+        const metadata = { methodName: "register", methodDefinition };
+        const end = this.perfLogger.start({ domain: PerfDomain.Interop, metadata, ipc: true });
+
+        const result = this.server.register(methodDefinition, callback);
+
+        result.then(end.success).catch(end.error);
+        return result;
     }
 
     public invoke(methodFilter: string | Glue42Core.AGM.MethodDefinition, argumentObj?: object, target?: Glue42Core.AGM.InstanceTarget | Glue42Core.AGM.Instance | Glue42Core.AGM.Instance[], additionalOptions?: Glue42Core.AGM.InvokeOptions, success?: (result: Glue42Core.AGM.InvocationResult<any>) => void, error?: (error: { method: Glue42Core.AGM.MethodDefinition; called_with: object; executed_by: Glue42Core.AGM.Instance; message: string; status: number; returned: object; }) => void): Promise<Glue42Core.AGM.InvocationResult<any>> {
-        return this.client.invoke(methodFilter, argumentObj, target, additionalOptions, success, error);
+        const metadata = { methodName: "invoke", methodFilter, target, additionalOptions };
+        const end = this.perfLogger.start({ domain: PerfDomain.Interop, metadata, ipc: true, args: argumentObj });
+
+        const result = this.client.invoke(methodFilter, argumentObj, target, additionalOptions, success, error);
+
+        result.then((obj) => end.success(obj?.all_return_values)).catch(end.error);
+        return result;
     }
 }

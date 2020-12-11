@@ -4,11 +4,13 @@ import { ServerMethodInfo, ResultContext, RequestContext, ServerSubscriptionInfo
 import { InvokeResultMessage } from "./client/client";
 import Connection from "../connection/connection";
 import { Logger } from "../logger/logger";
+import { Logger as PerfLogger} from "../monitoring/logger";
 import { UserSubscription } from "./protocols/gw3/subscription";
 
 export interface InteropSettings {
     connection: Connection;
     logger: Logger;
+    perfLogger: PerfLogger;
     /** Default for how much to wait for method to appear when invoking. If not set 10000
      * @default 10000
      */
